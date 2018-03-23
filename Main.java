@@ -1,5 +1,7 @@
 /**
-小明中午路过一家公共停车场，出于程序员的职业习惯，他很想知道这个停车场上午的最大化利用率有多少。经与门卫大叔沟通，他获得了该停车场上午车辆入场时间与出场时间的记录表（数据格式参考样例输入），你能通过拿到的数据写一个函数快速的帮小明算出这家停车场，上午最多的时候同时停放了多少辆车吗？要求时间复杂度不高于：O(n)*lgN
+小明中午路过一家公共停车场，出于程序员的职业习惯，他很想知道这个停车场上午的最大化利用率有多少。
+经与门卫大叔沟通，他获得了该停车场上午车辆入场时间与出场时间的记录表（数据格式参考样例输入），
+你能通过拿到的数据写一个函数快速的帮小明算出这家停车场，上午最多的时候同时停放了多少辆车吗？要求时间复杂度不高于：O(n)*lgN
  
 注意事项：
 1、为方便起见，简化计算，驶入时间和开出时间以整点记录，如9点，10点。
@@ -16,6 +18,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 
+
 public class Main {
 
     private static final String carSplit =";";
@@ -27,6 +30,7 @@ public class Main {
         // 数据输入
         Scanner in = new Scanner(System.in);
         inString = in.nextLine();
+        //inString = "8,9;4,6;3,7;6,8";
         //字符串数组格式校验
         Pattern pat = Pattern.compile(regress);
         if(inString == null || inString.trim().equals("")||!pat.matcher(inString).matches()){
@@ -59,7 +63,20 @@ public class Main {
     }
     //核心算法实现
     public int countCars(int[][] carArray) {
-	// write your code here
-	return 0;
+    	// write your code here
+    	int[] count = new int[13];
+    	for (int i = 0; i < carArray.length; i++) {
+    	   if (carArray[i][0] >= carArray[i][1])
+    	       continue;
+    	   for (int j = carArray[i][0]; j<carArray[i][1]; j++) {
+	           count[j]++;
+	       }
+           
+	    }
+	    int max = Integer.MIN_VALUE;
+	    for (int i = 0; i < 13; i++){
+            max = Math.max(max, count[i]);
+        }
+    	return max;
     }
 }
