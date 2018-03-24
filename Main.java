@@ -16,8 +16,8 @@
 
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
-
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
 
@@ -25,6 +25,7 @@ public class Main {
     private static final String timeSplit =",";
     private static final String regress = "(\\d{1,2},\\d{1,2};)*\\d{1,2},\\d{1,2}$";
     private static final int morningHours = 12 + 1;
+    private Set<Integer> startTimeSet = new HashSet<Integer>();
     public static void main(String[] args) {
         String inString = null;
         // 数据输入
@@ -56,8 +57,8 @@ public class Main {
             if(start > end || start >= morningHours){
                 continue;
             }
-            // 处理连续停到下午的车的时间边界
-            end = Math.min(end, morningHours);
+            
+            startTimeSet.add(start);
             carArray[i][0] = start;
             carArray[i][1] = end;
         }
@@ -68,8 +69,13 @@ public class Main {
     	// write your code here
     	int[] count = new int[morningHours];
     	for (int i = 0; i < carArray.length; i++) {
-
-    	   for (int j = carArray[i][0]; j < carArray[i][1]; j++) {
+    	    int start = carArray[i][0];
+    	    int end = carArray[i][1];
+    	    if (startTimeSet.contains(end)){
+	           end--;
+	        }
+	        
+    	    for (int j = start; j < morningHours && j <= end; j++) {
 	           count[j]++;
 	       }
            
