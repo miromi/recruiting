@@ -24,7 +24,7 @@ public class Main {
     private static final String carSplit =";";
     private static final String timeSplit =",";
     private static final String regress = "(\\d{1,2},\\d{1,2};)*\\d{1,2},\\d{1,2}$";
-    
+    private static final int morningHours = 12 + 1;
     public static void main(String[] args) {
         String inString = null;
         // 数据输入
@@ -53,9 +53,11 @@ public class Main {
         for (int i = 0; i < row; i++) {
             start = Integer.parseInt(strArray[i].split(timeSplit)[0]);
             end = Integer.parseInt(strArray[i].split(timeSplit)[1]);
-            if(start>end){
+            if(start > end || start >= morningHours){
                 continue;
             }
+            // 处理连续停到下午的车的时间边界
+            end = Math.min(end, morningHours);
             carArray[i][0] = start;
             carArray[i][1] = end;
         }
@@ -64,17 +66,16 @@ public class Main {
     //核心算法实现
     public int countCars(int[][] carArray) {
     	// write your code here
-    	int[] count = new int[13];
+    	int[] count = new int[morningHours];
     	for (int i = 0; i < carArray.length; i++) {
-    	   if (carArray[i][0] >= carArray[i][1])
-    	       continue;
-    	   for (int j = carArray[i][0]; j<carArray[i][1]; j++) {
+
+    	   for (int j = carArray[i][0]; j < carArray[i][1]; j++) {
 	           count[j]++;
 	       }
            
 	    }
 	    int max = Integer.MIN_VALUE;
-	    for (int i = 0; i < 13; i++){
+	    for (int i = 0; i < morningHours; i++){
             max = Math.max(max, count[i]);
         }
     	return max;
